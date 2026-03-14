@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visual Pattern Library — Authority Engine</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@300;400;500&family=Barlow+Condensed:ital,wght@0,300;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #080e1a;
+  --blue: #3a7bd5;
+  --bright: #4f8ef0;
+  --card: #0c1220;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:#050a12; color:#fff; font-family:'Barlow',sans-serif; min-height:100vh; }
+
+.header {
+  padding: 48px 40px 32px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+.header h1 {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size: 42px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+.header h1 span { color: var(--bright); }
+.header p {
+  font-size: 14px;
+  color: rgba(255,255,255,0.4);
+  margin-top: 10px;
+  max-width: 600px;
+  line-height: 1.5;
+}
+
+.category {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+.cat-label {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--bright);
+  margin-bottom: 16px;
+  margin-top: 48px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.cat-label::after {
+  content:'';
+  flex:1;
+  height:1px;
+  background: linear-gradient(to right, rgba(79,142,240,0.2), transparent);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.pattern-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: border-color 0.3s, transform 0.2s;
+}
+.pattern-card:hover {
+  border-color: rgba(79,142,240,0.25);
+  transform: translateY(-2px);
+}
+
+.preview {
+  aspect-ratio: 4/5;
+  background: var(--navy);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.preview::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+.pattern-info {
+  padding: 12px 14px 14px;
+}
+.pattern-name {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #fff;
+}
+.pattern-use {
+  font-size: 11px;
+  color: rgba(255,255,255,0.35);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* ===== ANIMATION ===== */
+@keyframes fadeUp { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+@keyframes growRight { from { transform:scaleX(0); } to { transform:scaleX(1); } }
+@keyframes growUp { from { transform:scaleY(0); } to { transform:scaleY(1); } }
+@keyframes drawLine { to { stroke-dashoffset:0; } }
+@keyframes pulse { 0%,100%{opacity:0.3;} 50%{opacity:0.8;} }
+@keyframes fillRing { to { stroke-dashoffset: 0; } }
+@keyframes slideIn { from { opacity:0; transform:translateX(-10px); } to { opacity:1; transform:translateX(0); } }
+@keyframes float { 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-6px); } }
+@keyframes floatSlow { 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-4px); } }
+@keyframes spin { from { transform:rotate(0deg); } to { transform:rotate(360deg); } }
+@keyframes spinReverse { from { transform:rotate(360deg); } to { transform:rotate(0deg); } }
+@keyframes breathe { 0%,100%{ transform:scale(1); opacity:0.6; } 50%{ transform:scale(1.08); opacity:1; } }
+@keyframes glow { 0%,100%{ box-shadow:0 0 6px rgba(79,142,240,0.2); } 50%{ box-shadow:0 0 18px rgba(79,142,240,0.5); } }
+@keyframes glowText { 0%,100%{ text-shadow:0 0 4px rgba(79,142,240,0.2); } 50%{ text-shadow:0 0 12px rgba(79,142,240,0.5); } }
+@keyframes slideRight { from { transform:translateX(-100%); opacity:0; } to { transform:translateX(0); opacity:1; } }
+@keyframes fillUp { from { height:0%; } to { height:var(--target-h); } }
+@keyframes wiggle { 0%,100%{ transform:rotate(0deg); } 25%{ transform:rotate(-2deg); } 75%{ transform:rotate(2deg); } }
+@keyframes blink { 0%,100%{ opacity:1; } 50%{ opacity:0.3; } }
+@keyframes orbit1 { from { transform:rotate(0deg) translateX(50px) rotate(0deg); } to { transform:rotate(360deg) translateX(50px) rotate(-360deg); } }
+@keyframes orbit2 { from { transform:rotate(120deg) translateX(50px) rotate(-120deg); } to { transform:rotate(480deg) translateX(50px) rotate(-480deg); } }
+@keyframes orbit3 { from { transform:rotate(240deg) translateX(50px) rotate(-240deg); } to { transform:rotate(600deg) translateX(50px) rotate(-600deg); } }
+@keyframes waveBar { 0%,100%{ transform:scaleY(0.3); } 50%{ transform:scaleY(1); } }
+@keyframes cellFade { 0%{ opacity:0; transform:scale(0.5); } 100%{ opacity:1; transform:scale(1); } }
+@keyframes markerSlide { from { left:5%; } to { left:var(--target-pos); } }
+@keyframes dotMove { 0%{ cx:38; cy:35; } 100%{ cx:92; cy:28; } }
+@keyframes tiltRock { 0%,100%{ transform:rotate(-2deg); } 50%{ transform:rotate(2deg); } }
+@keyframes ripple { 0%{ transform:scale(1); opacity:0.3; } 100%{ transform:scale(2.5); opacity:0; } }
+@keyframes shackleOpen { from { transform:translateY(0) rotate(0); } to { transform:translateY(-4px) rotate(-15deg); } }
+@keyframes dominoFall { 0%{ transform:rotate(0deg); } 100%{ transform:rotate(var(--fall-deg)); } }
+@keyframes dropThrough { 0%{ transform:translateY(-20px); opacity:0; } 50%{ opacity:1; } 100%{ transform:translateY(30px); opacity:0; } }
+@keyframes scanMove { 0%,100%{ transform:translate(-10px, -5px); } 50%{ transform:translate(10px, 5px); } }
+@keyframes thermFill { from { height:0%; } to { height:35%; } }
+@keyframes typeChar { from { width:0; } to { width:100%; } }
+@keyframes cursorBlink { 0%,100%{ border-right-color:rgba(79,142,240,0.6); } 50%{ border-right-color:transparent; } }
+@keyframes stackUp { from { opacity:0; transform:translateY(20px) scale(0.95); } to { opacity:1; transform:translateY(0) scale(1); } }
+@keyframes drawPath { to { stroke-dashoffset:0; } }
+@keyframes slideVenn { from { cx: 75; } to { cx: 55; } }
+@keyframes slideVenn2 { from { cx: 75; } to { cx: 95; } }
+@keyframes shimmer { 0%{ transform:translateX(-100%); } 100%{ transform:translateX(200%); } }
+@keyframes ping { 0%{ transform:scale(1); opacity:0.4; } 100%{ transform:scale(2.2); opacity:0; } }
+@keyframes scanX { 0%,100%{ transform:translateX(-8px); } 50%{ transform:translateX(8px); } }
+@keyframes scanY { 0%,100%{ transform:translateY(-4px); } 50%{ transform:translateY(4px); } }
+@keyframes bobFloat { 0%,100%{ transform:translateY(0) rotate(0deg); } 25%{ transform:translateY(-3px) rotate(0.5deg); } 75%{ transform:translateY(2px) rotate(-0.5deg); } }
+
+.footer {
+  text-align: center;
+  padding: 60px 40px;
+  font-family:'Barlow Condensed',sans-serif;
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  color: rgba(255,255,255,0.12);
+  text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Visual <span>Pattern Library</span></h1>
+  <p>Every visual model available for carousel slides. Pick the right one for each belief shift.</p>
+</div>
+
+<!-- ============ DATA & COMPARISON ============ -->
+<div class="category">
+  <div class="cat-label">Data & Comparison</div>
+  <div class="grid">
+
+    <!-- Funnel -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="display:flex;flex-direction:column;align-items:flex-start;gap:5px;width:100%;">
+          <div style="width:100%;height:14px;background:rgba(79,142,240,0.3);border-radius:2px;transform-origin:left;animation:growRight 0.6s 0s cubic-bezier(0.16,1,0.3,1) both;position:relative;overflow:hidden;">
+            <div style="position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.08),transparent);animation:shimmer 2s 0.8s infinite;"></div>
+          </div>
+          <div style="width:72%;height:14px;background:rgba(79,142,240,0.22);border-radius:2px;transform-origin:left;animation:growRight 0.6s 0.1s cubic-bezier(0.16,1,0.3,1) both;"></div>
+          <div style="width:44%;height:14px;background:rgba(79,142,240,0.15);border-radius:2px;transform-origin:left;animation:growRight 0.6s 0.2s cubic-bezier(0.16,1,0.3,1) both;"></div>
+          <div style="width:18%;height:14px;background:rgba(239,68,68,0.25);border-radius:2px;transform-origin:left;animation:growRight 0.6s 0.3s cubic-bezier(0.16,1,0.3,1) both;animation:growRight 0.6s 0.3s cubic-bezier(0.16,1,0.3,1) both, pulse 2s 1s infinite;"></div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Funnel / Waterfall</div>
+        <div class="pattern-use">Drop-off, conversion leaks, narrowing audience</div>
+      </div>
+    </div>
+
+    <!-- Bar Chart -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="display:flex;align-items:flex-end;gap:6px;height:120px;">
+          <div style="width:16px;height:30%;background:#3a7bd5;border-radius:2px 2px 0 0;transform-origin:bottom;animation:growUp 0.5s 0s cubic-bezier(0.16,1,0.3,1) both;"></div>
+          <div style="width:16px;height:45%;background:#3a7bd5;border-radius:2px 2px 0 0;transform-origin:bottom;animation:growUp 0.5s 0.08s cubic-bezier(0.16,1,0.3,1) both;"></div>
+          <div style="width:16px;height:35%;background:#3a7bd5;border-radius:2px 2px 0 0;transform-origin:bottom;animation:growUp 0.5s 0.16s cubic-bezier(0.16,1,0.3,1) both;"></div>
+          <div style="width:16px;height:55%;background:#3a7bd5;border-radius:2px 2px 0 0;transform-origin:bottom;animation:growUp 0.5s 0.24s cubic-bezier(0.16,1,0.3,1) both;"></div>
+          <div style="width:16px;height:80%;background:#4f8ef0;border-radius:2px 2px 0 0;transform-origin:bottom;animation:growUp 0.5s 0.32s cubic-bezier(0.16,1,0.3,1) both;"></div>
+          <div style="width:16px;height:95%;background:#4f8ef0;border-radius:2px 2px 0 0;transform-origin:bottom;animation:growUp 0.5s 0.4s cubic-bezier(0.16,1,0.3,1) both;"></div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Bar Chart</div>
+        <div class="pattern-use">Growth, comparison, before/after metrics</div>
+      </div>
+    </div>
+
+    <!-- Donut Ring -->
+    <div class="pattern-card">
+      <div class="preview">
+        <svg width="100" height="100" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="38" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="8"/>
+          <circle cx="50" cy="50" r="38" fill="none" stroke="#4f8ef0" stroke-width="8" stroke-linecap="round"
+            stroke-dasharray="180 239" stroke-dashoffset="180"
+            transform="rotate(-90 50 50)"
+            style="animation: fillRing 1s 0.3s cubic-bezier(0.16,1,0.3,1) forwards;"/>
+          <text x="50" y="48" text-anchor="middle" font-family="Barlow Condensed" font-size="22" font-weight="900" fill="#fff" style="animation:glowText 3s infinite;">73%</text>
+          <text x="50" y="62" text-anchor="middle" font-family="Barlow Condensed" font-size="8" font-weight="700" fill="rgba(255,255,255,0.3)" letter-spacing="0.15em" style="animation:pulse 3s infinite;">WASTED</text>
+        </svg>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Donut / Ring</div>
+        <div class="pattern-use">Percentage, completion, proportion of whole</div>
+      </div>
+    </div>
+
+    <!-- Comparison Columns -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="display:flex;gap:10px;width:100%;">
+          <div style="flex:1;background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.12);border-radius:4px;padding:10px 8px;display:flex;flex-direction:column;gap:6px;animation:slideIn 0.5s 0s cubic-bezier(0.16,1,0.3,1) both;">
+            <div style="font-family:'Barlow Condensed';font-size:8px;font-weight:700;letter-spacing:0.2em;color:rgba(239,68,68,0.5);text-transform:uppercase;text-align:center;">Before</div>
+            <div style="font-size:7px;color:rgba(255,255,255,0.25);text-align:center;animation:fadeUp 0.4s 0.2s both;">✗ Random posts</div>
+            <div style="font-size:7px;color:rgba(255,255,255,0.25);text-align:center;animation:fadeUp 0.4s 0.35s both;">✗ No system</div>
+            <div style="font-size:7px;color:rgba(255,255,255,0.25);text-align:center;animation:fadeUp 0.4s 0.5s both;">✗ 2% convert</div>
+          </div>
+          <div style="flex:1;background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.12);border-radius:4px;padding:10px 8px;display:flex;flex-direction:column;gap:6px;animation:fadeUp 0.5s 0.3s cubic-bezier(0.16,1,0.3,1) both;">
+            <div style="font-family:'Barlow Condensed';font-size:8px;font-weight:700;letter-spacing:0.2em;color:rgba(52,211,153,0.6);text-transform:uppercase;text-align:center;">After</div>
+            <div style="font-size:7px;color:rgba(255,255,255,0.4);text-align:center;animation:fadeUp 0.4s 0.5s both;">✓ Belief-led</div>
+            <div style="font-size:7px;color:rgba(255,255,255,0.4);text-align:center;animation:fadeUp 0.4s 0.65s both;">✓ Engineered</div>
+            <div style="font-size:7px;color:rgba(255,255,255,0.4);text-align:center;animation:fadeUp 0.4s 0.8s both;">✓ 18% convert</div>
+          </div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Comparison Columns</div>
+        <div class="pattern-use">Before/after, this vs that, old way vs new way</div>
+      </div>
+    </div>
+
+    <!-- 2x2 Matrix -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="position:relative;width:140px;height:140px;">
+          <div style="position:absolute;left:50%;top:0;bottom:0;width:1px;background:rgba(255,255,255,0.08);"></div>
+          <div style="position:absolute;top:50%;left:0;right:0;height:1px;background:rgba(255,255,255,0.08);"></div>
+          <!-- Labels -->
+          <div style="position:absolute;top:4px;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed';font-size:7px;font-weight:700;letter-spacing:0.15em;color:rgba(255,255,255,0.2);text-transform:uppercase;">High Authority</div>
+          <div style="position:absolute;bottom:4px;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed';font-size:7px;font-weight:700;letter-spacing:0.15em;color:rgba(255,255,255,0.2);text-transform:uppercase;">Low Authority</div>
+          <!-- Quadrants -->
+          <div style="position:absolute;top:20px;left:6px;font-size:7px;color:rgba(255,255,255,0.2);">Invisible<br>Expert</div>
+          <div style="position:absolute;top:20px;right:6px;text-align:right;font-size:7px;color:#4f8ef0;">Authority<br>Engine ★</div>
+          <div style="position:absolute;bottom:20px;left:6px;font-size:7px;color:rgba(255,255,255,0.15);">Unknown</div>
+          <div style="position:absolute;bottom:20px;right:6px;text-align:right;font-size:7px;color:rgba(255,255,255,0.2);">Famous<br>Nobody</div>
+          <!-- Dot -->
+          <div style="position:absolute;top:24px;right:22px;width:8px;height:8px;border-radius:50%;background:#4f8ef0;animation:glow 2s infinite;"></div>
+          <!-- Ping on the dot -->
+          <div style="position:absolute;top:21px;right:19px;width:14px;height:14px;border-radius:50%;border:1px solid rgba(79,142,240,0.3);animation:ping 2.5s infinite;"></div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">2×2 Matrix</div>
+        <div class="pattern-use">Positioning, quadrant mapping, strategic placement</div>
+      </div>
+    </div>
+
+    <!-- Ranked List -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="display:flex;flex-direction:column;gap:6px;width:100%;">
+          <div style="display:flex;align-items:center;gap:8px;animation:slideIn 0.4s 0s both;">
+            <div style="font-family:'Barlow Condensed';font-size:14px;font-weight:900;color:#4f8ef0;width:18px;">1</div>
+            <div style="flex:1;height:10px;background:rgba(79,142,240,0.2);border-radius:2px;position:relative;overflow:hidden;"><div style="position:absolute;inset:0;width:92%;background:#4f8ef0;border-radius:2px;transform-origin:left;animation:growRight 0.6s 0.1s both;"></div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;animation:slideIn 0.4s 0.1s both;">
+            <div style="font-family:'Barlow Condensed';font-size:14px;font-weight:900;color:rgba(79,142,240,0.6);width:18px;">2</div>
+            <div style="flex:1;height:10px;background:rgba(79,142,240,0.2);border-radius:2px;position:relative;overflow:hidden;"><div style="position:absolute;inset:0;width:68%;background:rgba(79,142,240,0.6);border-radius:2px;transform-origin:left;animation:growRight 0.6s 0.2s both;"></div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;animation:slideIn 0.4s 0.2s both;">
+            <div style="font-family:'Barlow Condensed';font-size:14px;font-weight:900;color:rgba(79,142,240,0.4);width:18px;">3</div>
+            <div style="flex:1;height:10px;background:rgba(79,142,240,0.2);border-radius:2px;position:relative;overflow:hidden;"><div style="position:absolute;inset:0;width:45%;background:rgba(79,142,240,0.4);border-radius:2px;transform-origin:left;animation:growRight 0.6s 0.3s both;"></div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;animation:slideIn 0.4s 0.3s both;">
+            <div style="font-family:'Barlow Condensed';font-size:14px;font-weight:900;color:rgba(255,255,255,0.2);width:18px;">4</div>
+            <div style="flex:1;height:10px;background:rgba(79,142,240,0.2);border-radius:2px;position:relative;overflow:hidden;"><div style="position:absolute;inset:0;width:22%;background:rgba(255,255,255,0.15);border-radius:2px;transform-origin:left;animation:growRight 0.6s 0.4s both;"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Ranked List</div>
+        <div class="pattern-use">Priority order, leaderboard, hierarchy of impact</div>
+      </div>
+    </div>
+
+    <!-- Heat Grid -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div class="heat-grid" style="display:flex;flex-direction:column;gap:3px;"></div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Heat Grid</div>
+        <div class="pattern-use">Consistency, activity map, engagement patterns</div>
+      </div>
+    </div>
+
+    <!-- Radar Chart -->
+    <div class="pattern-card">
+      <div class="preview">
+        <svg width="130" height="130" viewBox="0 0 130 130">
+          <!-- Grid rings -->
+          <polygon points="65,15 110,40 110,90 65,115 20,90 20,40" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+          <polygon points="65,30 95,47 95,83 65,100 35,83 35,47" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+          <polygon points="65,45 80,54 80,76 65,85 50,76 50,54" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="1"/>
+          <!-- Axes -->
+          <line x1="65" y1="15" x2="65" y2="115" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+          <line x1="20" y1="40" x2="110" y2="90" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+          <line x1="110" y1="40" x2="20" y2="90" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+          <!-- Data polygon -->
+          <polygon points="65,20 105,48 90,88 40,95 25,50 55,32" fill="rgba(79,142,240,0.12)" stroke="#4f8ef0" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="400" stroke-dashoffset="400" style="animation:drawLine 2s 0.3s cubic-bezier(0.25,0.1,0.25,1) forwards;"/>
+          <!-- Data dots -->
+          <circle cx="65" cy="20" r="3" fill="#4f8ef0"/>
+          <circle cx="105" cy="48" r="3" fill="#4f8ef0"/>
+          <circle cx="90" cy="88" r="3" fill="#4f8ef0"/>
+          <circle cx="40" cy="95" r="3" fill="#4f8ef0"/>
+          <circle cx="25" cy="50" r="3" fill="#4f8ef0"/>
+          <circle cx="55" cy="32" r="3" fill="#4f8ef0"/>
+          <!-- Labels -->
+          <text x="65" y="10" text-anchor="middle" font-family="Barlow Condensed" font-size="7" fill="rgba(255,255,255,0.3)" font-weight="700" letter-spacing="0.1em">VISIBILITY</text>
+          <text x="118" y="42" text-anchor="start" font-family="Barlow Condensed" font-size="7" fill="rgba(255,255,255,0.3)" font-weight="700">PROOF</text>
+          <text x="118" y="94" text-anchor="start" font-family="Barlow Condensed" font-size="7" fill="rgba(255,255,255,0.3)" font-weight="700">SYSTEMS</text>
+          <text x="65" y="126" text-anchor="middle" font-family="Barlow Condensed" font-size="7" fill="rgba(255,255,255,0.3)" font-weight="700">OFFER</text>
+          <text x="8" y="94" text-anchor="start" font-family="Barlow Condensed" font-size="7" fill="rgba(255,255,255,0.3)" font-weight="700">CONTENT</text>
+          <text x="8" y="42" text-anchor="start" font-family="Barlow Condensed" font-size="7" fill="rgba(255,255,255,0.3)" font-weight="700">BRAND</text>
+        </svg>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Radar / Spider</div>
+        <div class="pattern-use">Multi-axis comparison, skill profiles, gap analysis</div>
+      </div>
+    </div>
+
+    <!-- Line Chart -->
+    <div class="pattern-card">
+      <div class="preview">
+        <svg width="160" height="100" viewBox="0 0 160 100">
+          <line x1="0" y1="90" x2="160" y2="90" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <polyline points="0,80 25,75 50,70 75,60 95,35 120,25 145,15 160,10" fill="none" stroke="#4f8ef0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"
+            stroke-dasharray="300" stroke-dashoffset="300" style="animation:drawLine 1.4s 0.2s cubic-bezier(0.25,0.1,0.25,1) forwards;"/>
+          <!-- Glow -->
+          <polyline points="0,80 25,75 50,70 75,60 95,35 120,25 145,15 160,10" fill="none" stroke="#4f8ef0" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity="0.15"
+            stroke-dasharray="300" stroke-dashoffset="300" style="animation:drawLine 1.4s 0.2s cubic-bezier(0.25,0.1,0.25,1) forwards;"/>
+        </svg>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Line Chart</div>
+        <div class="pattern-use">Growth trajectory, trend over time, momentum</div>
+      </div>
+    </div>
+
+    <!-- Spectrum / Slider -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="width:100%;display:flex;flex-direction:column;gap:14px;">
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+              <span style="font-family:'Barlow Condensed';font-size:8px;font-weight:700;letter-spacing:0.15em;color:rgba(239,68,68,0.5);text-transform:uppercase;">Teacher</span>
+              <span style="font-family:'Barlow Condensed';font-size:8px;font-weight:700;letter-spacing:0.15em;color:rgba(52,211,153,0.6);text-transform:uppercase;">Authority</span>
+            </div>
+            <div style="height:6px;background:linear-gradient(to right, rgba(239,68,68,0.2), rgba(79,142,240,0.15), rgba(52,211,153,0.2));border-radius:3px;position:relative;">
+              <div style="position:absolute;top:-4px;left:28%;width:14px;height:14px;border-radius:50%;background:rgba(239,68,68,0.4);border:2px solid rgba(239,68,68,0.6);animation:pulse 3s infinite;"></div>
+            </div>
+            <div style="font-family:'Barlow Condensed';font-size:7px;color:rgba(255,255,255,0.2);text-align:center;margin-top:4px;">MOST CREATORS</div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+              <span style="font-family:'Barlow Condensed';font-size:8px;font-weight:700;letter-spacing:0.15em;color:rgba(255,255,255,0.2);text-transform:uppercase;">Volume</span>
+              <span style="font-family:'Barlow Condensed';font-size:8px;font-weight:700;letter-spacing:0.15em;color:#4f8ef0;text-transform:uppercase;">Conviction</span>
+            </div>
+            <div style="height:6px;background:linear-gradient(to right, rgba(255,255,255,0.06), rgba(79,142,240,0.3));border-radius:3px;position:relative;">
+              <div style="position:absolute;top:-4px;right:15%;width:14px;height:14px;border-radius:50%;background:rgba(79,142,240,0.4);border:2px solid #4f8ef0;animation:glow 2s infinite;"></div>
+            </div>
+            <div style="font-family:'Barlow Condensed';font-size:7px;color:rgba(79,142,240,0.4);text-align:center;margin-top:4px;">YOU SHOULD BE HERE</div>
+          </div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Spectrum / Slider</div>
+        <div class="pattern-use">Where you sit vs where you should be, continuum</div>
+      </div>
+    </div>
+
+    <!-- Progress Bars -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="width:100%;display:flex;flex-direction:column;gap:10px;">
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span style="font-family:'Barlow Condensed';font-size:8px;font-weight:700;color:rgba(255,255,255,0.3);letter-spacing:0.12em;">CONTENT</span>
+              <span style="font-family:'Barlow Condensed';font-size:9px;font-weight:900;color:#4f8ef0;">92%</span>
+            </div>
+            <div style="height:5px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;"><div style="width:92%;height:100%;background:#4f8ef0;border-radius:3px;transform-origin:left;animation:growRight 0.6s 0.1s both;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span style="font-family:'Barlow Condensed';font-size:8px;font-weight:700;color:rgba(255,255,255,0.3);letter-spacing:0.12em;">BRAND</span>
+              <span style="font-family:'Barlow Condensed';font-size:9px;font-weight:900;color:rgba(79,142,240,0.6);">64%</span>
+            </div>
+            <div style="height:5px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;"><div style="width:64%;height:100%;background:rgba(79,142,240,0.6);border-radius:3px;transform-origin:left;animation:growRight 0.6s 0.2s both;"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+              <span style="font-family:'Barlow Condensed';font-size:8px;font-weight:700;color:rgba(255,255,255,0.3);letter-spacing:0.12em;">SYSTEMS</span>
+              <span style="font-family:'Barlow Condensed';font-size:9px;font-weight:900;color:rgba(255,255,255,0.3);">18%</span>
+            </div>
+            <div style="height:5px;background:rgba(255,255,255,0.06);border-radius:3px;overflow:hidden;"><div style="width:18%;height:100%;background:rgba(255,255,255,0.2);border-radius:3px;transform-origin:left;animation:growRight 0.6s 0.3s both;"></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Progress Bars</div>
+        <div class="pattern-use">Completion, audit scores, readiness check</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ SPATIAL & RELATIONAL ============ -->
+<div class="category">
+  <div class="cat-label">Spatial & Relational</div>
+  <div class="grid">
+
+    <!-- Concentric Circles -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="position:relative;width:140px;height:140px;">
+          <div style="position:absolute;inset:0;border-radius:50%;border:1px solid rgba(79,142,240,0.06);animation:breathe 4s 0.6s infinite;"></div>
+          <div style="position:absolute;inset:18px;border-radius:50%;border:1px solid rgba(79,142,240,0.1);animation:breathe 4s 0.3s infinite;"></div>
+          <div style="position:absolute;inset:36px;border-radius:50%;border:1px solid rgba(79,142,240,0.18);animation:breathe 4s 0s infinite;"></div>
+          <div style="position:absolute;inset:50px;border-radius:50%;background:rgba(79,142,240,0.08);border:1px solid rgba(79,142,240,0.25);display:flex;align-items:center;justify-content:center;animation:glow 3s infinite;">
+            <span style="font-family:'Barlow Condensed';font-size:9px;font-weight:900;color:#4f8ef0;letter-spacing:0.08em;animation:glowText 3s infinite;">YOU</span>
+          </div>
+          <!-- Ripple ping -->
+          <div style="position:absolute;inset:50px;border-radius:50%;border:1px solid rgba(79,142,240,0.2);animation:ping 3s infinite;"></div>
+          <div style="position:absolute;top:8px;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed';font-size:6px;color:rgba(255,255,255,0.15);letter-spacing:0.1em;">COLD</div>
+          <div style="position:absolute;top:28px;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed';font-size:6px;color:rgba(255,255,255,0.2);letter-spacing:0.1em;">WARM</div>
+          <div style="position:absolute;top:42px;left:50%;transform:translateX(-50%);font-family:'Barlow Condensed';font-size:6px;color:rgba(255,255,255,0.3);letter-spacing:0.1em;">HOT</div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Concentric Circles</div>
+        <div class="pattern-use">Influence layers, audience proximity, core vs edge</div>
+      </div>
+    </div>
+
+    <!-- Hub & Spoke -->
+    <div class="pattern-card">
+      <div class="preview">
+        <svg width="140" height="140" viewBox="0 0 140 140">
+          <!-- Spokes -->
+          <line x1="70" y1="70" x2="70" y2="18" stroke="rgba(79,142,240,0.15)" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="70" y1="70" x2="118" y2="42" stroke="rgba(79,142,240,0.15)" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="70" y1="70" x2="118" y2="98" stroke="rgba(79,142,240,0.15)" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="70" y1="70" x2="70" y2="122" stroke="rgba(79,142,240,0.15)" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="70" y1="70" x2="22" y2="98" stroke="rgba(79,142,240,0.15)" stroke-width="1" stroke-dasharray="3,3"/>
+          <line x1="70" y1="70" x2="22" y2="42" stroke="rgba(79,142,240,0.15)" stroke-width="1" stroke-dasharray="3,3"/>
+          <!-- Center -->
+          <circle cx="70" cy="70" r="16" fill="rgba(79,142,240,0.1)" stroke="#4f8ef0" stroke-width="1.5" style="animation:breathe 3s infinite;transform-origin:70px 70px;"/>
+          <circle cx="70" cy="70" r="22" fill="none" stroke="rgba(79,142,240,0.15)" stroke-width="1" style="animation:ping 3s infinite;"/>
+          <circle cx="70" cy="70" r="22" fill="none" stroke="rgba(79,142,240,0.1)" stroke-width="1" style="animation:ping 3s 1.5s infinite;"/>
+          <text x="70" y="73" text-anchor="middle" font-family="Barlow Condensed" font-size="8" font-weight="900" fill="#4f8ef0" letter-spacing="0.08em" style="animation:glowText 3s infinite;">CORE</text>
+          <!-- Outer nodes -->
+          <circle cx="70" cy="18" r="8" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+          <circle cx="118" cy="42" r="8" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+          <circle cx="118" cy="98" r="8" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+          <circle cx="70" cy="122" r="8" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+          <circle cx="22" cy="98" r="8" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+          <circle cx="22" cy="42" r="8" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Hub & Spoke</div>
+        <div class="pattern-use">Central idea radiating to pillars, connected ecosystem</div>
+      </div>
+    </div>
+
+    <!-- Flowchart -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:0;">
+          <div style="padding:6px 14px;background:rgba(79,142,240,0.1);border:1px solid rgba(79,142,240,0.2);border-radius:4px;font-family:'Barlow Condensed';font-size:8px;font-weight:700;color:#4f8ef0;letter-spacing:0.12em;text-transform:uppercase;animation:fadeUp 0.4s 0s both;">Input</div>
+          <div style="width:1px;height:14px;background:rgba(79,142,240,0.2);animation:growUp 0.3s 0.2s both;transform-origin:top;"></div>
+          <div style="font-family:'Barlow Condensed';font-size:10px;color:rgba(79,142,240,0.4);animation:pulse 1.5s 0.5s infinite;">▼</div>
+          <div style="width:1px;height:6px;background:rgba(79,142,240,0.2);animation:growUp 0.3s 0.3s both;transform-origin:top;"></div>
+          <div style="padding:6px 14px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.06);border-radius:4px;font-family:'Barlow Condensed';font-size:8px;font-weight:700;color:rgba(255,255,255,0.4);letter-spacing:0.12em;text-transform:uppercase;animation:fadeUp 0.4s 0.4s both;">Process</div>
+          <div style="width:1px;height:14px;background:rgba(79,142,240,0.2);animation:growUp 0.3s 0.6s both;transform-origin:top;"></div>
+          <div style="font-family:'Barlow Condensed';font-size:10px;color:rgba(79,142,240,0.4);animation:pulse 1.5s 1s infinite;">▼</div>
+          <div style="width:1px;height:6px;background:rgba(79,142,240,0.2);animation:growUp 0.3s 0.7s both;transform-origin:top;"></div>
+          <div style="padding:6px 14px;background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.15);border-radius:4px;font-family:'Barlow Condensed';font-size:8px;font-weight:700;color:rgba(52,211,153,0.6);letter-spacing:0.12em;text-transform:uppercase;animation:fadeUp 0.4s 0.8s both;">Output</div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Flowchart / Process</div>
+        <div class="pattern-use">Step-by-step systems, input→output, pipelines</div>
+      </div>
+    </div>
+
+    <!-- Branching Path -->
+    <div class="pattern-card">
+      <div class="preview">
+        <svg width="160" height="140" viewBox="0 0 160 140">
+          <!-- Starting point -->
+          <circle cx="80" cy="20" r="6" fill="rgba(79,142,240,0.15)" stroke="#4f8ef0" stroke-width="1.5"/>
+          <!-- Fork lines -->
+          <path d="M80,26 L80,55 L40,80" fill="none" stroke="rgba(239,68,68,0.25)" stroke-width="1.5" stroke-dasharray="80" stroke-dashoffset="80" style="animation:drawLine 1.2s 0.3s cubic-bezier(0.25,0.1,0.25,1) forwards;"/>
+          <path d="M80,26 L80,55 L120,80" fill="none" stroke="rgba(52,211,153,0.3)" stroke-width="1.5" stroke-dasharray="80" stroke-dashoffset="80" style="animation:drawLine 1.2s 0.3s cubic-bezier(0.25,0.1,0.25,1) forwards;"/>
+          <!-- Left (bad) -->
+          <rect x="16" y="84" width="48" height="24" rx="4" fill="rgba(239,68,68,0.05)" stroke="rgba(239,68,68,0.15)" stroke-width="1"/>
+          <text x="40" y="98" text-anchor="middle" font-family="Barlow Condensed" font-size="7" font-weight="700" fill="rgba(239,68,68,0.4)" letter-spacing="0.1em">MORE CONTENT</text>
+          <text x="40" y="118" text-anchor="middle" font-family="Barlow Condensed" font-size="8" fill="rgba(255,255,255,0.15)">Same results</text>
+          <!-- Right (good) -->
+          <rect x="96" y="84" width="48" height="24" rx="4" fill="rgba(52,211,153,0.05)" stroke="rgba(52,211,153,0.15)" stroke-width="1"/>
+          <text x="120" y="98" text-anchor="middle" font-family="Barlow Condensed" font-size="7" font-weight="700" fill="rgba(52,211,153,0.5)" letter-spacing="0.1em">RIGHT CONTENT</text>
+          <text x="120" y="118" text-anchor="middle" font-family="Barlow Condensed" font-size="8" fill="rgba(52,211,153,0.4)">10× leverage</text>
+        </svg>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Branching Path</div>
+        <div class="pattern-use">Two choices, fork in the road, decision point</div>
+      </div>
+    </div>
+
+    <!-- Orbit -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="position:relative;width:140px;height:140px;">
+          <!-- Orbit rings -->
+          <div style="position:absolute;inset:20px;border-radius:50%;border:1px dashed rgba(79,142,240,0.1);"></div>
+          <div style="position:absolute;inset:40px;border-radius:50%;border:1px dashed rgba(79,142,240,0.15);"></div>
+          <!-- Center with glow -->
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:50%;background:rgba(79,142,240,0.2);border:1.5px solid #4f8ef0;animation:glow 3s infinite;"></div>
+          <!-- Ping ring -->
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:20px;height:20px;border-radius:50%;border:1px solid rgba(79,142,240,0.3);animation:ping 3s 1s infinite;"></div>
+          <!-- Orbiting satellites -->
+          <div style="position:absolute;top:50%;left:50%;width:10px;height:10px;margin:-5px 0 0 -5px;border-radius:50%;background:rgba(79,142,240,0.3);border:1px solid rgba(79,142,240,0.4);animation:orbit1 6s linear infinite;box-shadow:0 0 6px rgba(79,142,240,0.3);"></div>
+          <div style="position:absolute;top:50%;left:50%;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);animation:orbit2 8s linear infinite;"></div>
+          <div style="position:absolute;top:50%;left:50%;width:6px;height:6px;margin:-3px 0 0 -3px;border-radius:50%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);animation:orbit3 10s linear infinite;"></div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Orbit Model</div>
+        <div class="pattern-use">Central concept with orbiting elements, ecosystem</div>
+      </div>
+    </div>
+
+    <!-- Venn Diagram -->
+    <div class="pattern-card">
+      <div class="preview">
+        <svg width="150" height="110" viewBox="0 0 150 110">
+          <circle cx="55" cy="55" r="38" fill="rgba(79,142,240,0.06)" stroke="rgba(79,142,240,0.15)" stroke-width="1">
+            <animate attributeName="cx" values="40;55;55;40" dur="5s" repeatCount="indefinite"/>
+          </circle>
+          <circle cx="95" cy="55" r="38" fill="rgba(52,211,153,0.06)" stroke="rgba(52,211,153,0.12)" stroke-width="1">
+            <animate attributeName="cx" values="110;95;95;110" dur="5s" repeatCount="indefinite"/>
+          </circle>
+          <text x="38" y="55" text-anchor="middle" font-family="Barlow Condensed" font-size="8" font-weight="700" fill="rgba(79,142,240,0.4)" letter-spacing="0.08em">VISIBILITY</text>
+          <text x="112" y="55" text-anchor="middle" font-family="Barlow Condensed" font-size="8" font-weight="700" fill="rgba(52,211,153,0.4)" letter-spacing="0.08em">TRUST</text>
+          <text x="75" y="52" text-anchor="middle" font-family="Barlow Condensed" font-size="9" font-weight="900" fill="#fff">AUTH</text>
+          <text x="75" y="62" text-anchor="middle" font-family="Barlow Condensed" font-size="9" font-weight="900" fill="#fff">ORITY</text>
+        </svg>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Venn Diagram</div>
+        <div class="pattern-use">Overlap of two concepts, sweet spot, intersection</div>
+      </div>
+    </div>
+
+    <!-- Staircase -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="display:flex;align-items:flex-end;gap:3px;height:120px;">
+          <div style="display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;animation:fadeUp 0.5s 0s both;">
+            <div style="font-family:'Barlow Condensed';font-size:6px;color:rgba(255,255,255,0.2);letter-spacing:0.1em;">01</div>
+            <div style="width:28px;height:30px;background:rgba(79,142,240,0.12);border:1px solid rgba(79,142,240,0.15);border-radius:2px;transform-origin:bottom;animation:growUp 0.6s 0.1s cubic-bezier(0.16,1,0.3,1) both;"></div>
+          </div>
+          <div style="display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;animation:fadeUp 0.5s 0.15s both;">
+            <div style="font-family:'Barlow Condensed';font-size:6px;color:rgba(255,255,255,0.25);letter-spacing:0.1em;">02</div>
+            <div style="width:28px;height:52px;background:rgba(79,142,240,0.18);border:1px solid rgba(79,142,240,0.2);border-radius:2px;transform-origin:bottom;animation:growUp 0.6s 0.25s cubic-bezier(0.16,1,0.3,1) both;"></div>
+          </div>
+          <div style="display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;animation:fadeUp 0.5s 0.3s both;">
+            <div style="font-family:'Barlow Condensed';font-size:6px;color:rgba(255,255,255,0.3);letter-spacing:0.1em;">03</div>
+            <div style="width:28px;height:74px;background:rgba(79,142,240,0.25);border:1px solid rgba(79,142,240,0.25);border-radius:2px;transform-origin:bottom;animation:growUp 0.6s 0.4s cubic-bezier(0.16,1,0.3,1) both;"></div>
+          </div>
+          <div style="display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;animation:fadeUp 0.5s 0.45s both;">
+            <div style="font-family:'Barlow Condensed';font-size:6px;color:#4f8ef0;letter-spacing:0.1em;">04</div>
+            <div style="width:28px;height:100px;background:rgba(79,142,240,0.12);border:1px solid #4f8ef0;border-radius:2px;transform-origin:bottom;animation:growUp 0.6s 0.55s cubic-bezier(0.16,1,0.3,1) both, glow 3s 1s infinite;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Staircase / Levels</div>
+        <div class="pattern-use">Progression, ascending stages, building blocks</div>
+      </div>
+    </div>
+
+    <!-- Bridge -->
+    <div class="pattern-card">
+      <div class="preview">
+        <svg width="160" height="100" viewBox="0 0 160 100">
+          <!-- Left platform -->
+          <rect x="5" y="45" width="40" height="20" rx="3" fill="rgba(239,68,68,0.06)" stroke="rgba(239,68,68,0.15)" stroke-width="1"/>
+          <text x="25" y="58" text-anchor="middle" font-family="Barlow Condensed" font-size="7" font-weight="700" fill="rgba(239,68,68,0.45)" letter-spacing="0.08em">NOW</text>
+          <!-- Right platform -->
+          <rect x="115" y="45" width="40" height="20" rx="3" fill="rgba(52,211,153,0.06)" stroke="rgba(52,211,153,0.15)" stroke-width="1"/>
+          <text x="135" y="58" text-anchor="middle" font-family="Barlow Condensed" font-size="7" font-weight="700" fill="rgba(52,211,153,0.5)" letter-spacing="0.08em">GOAL</text>
+          <!-- Gap -->
+          <line x1="48" y1="65" x2="112" y2="65" stroke="rgba(255,255,255,0.06)" stroke-width="1" stroke-dasharray="4,4"/>
+          <text x="80" y="80" text-anchor="middle" font-family="Barlow Condensed" font-size="7" fill="rgba(255,255,255,0.15)">THE GAP</text>
+          <!-- Bridge -->
+          <rect x="50" y="48" width="60" height="14" rx="2" fill="rgba(79,142,240,0.08)" stroke="#4f8ef0" stroke-width="1.5">
+            <animate attributeName="opacity" values="0;0;1;1" dur="3s" repeatCount="indefinite"/>
+            <animateTransform attributeName="transform" type="scale" values="0 1;0 1;1 1;1 1" dur="3s" repeatCount="indefinite" additive="sum"/>
+          </rect>
+          <text x="80" y="58" text-anchor="middle" font-family="Barlow Condensed" font-size="7" font-weight="900" fill="#4f8ef0" letter-spacing="0.1em" style="animation:glowText 3s 1.5s infinite;">YOUR SYSTEM</text>
+        </svg>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Bridge / Gap</div>
+        <div class="pattern-use">Current state → desired state with your solution bridging</div>
+      </div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="position:relative;height:130px;display:flex;flex-direction:column;justify-content:space-between;padding-left:30px;">
+          <!-- Vertical line -->
+          <div style="position:absolute;left:12px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom, rgba(79,142,240,0.3), rgba(79,142,240,0.1));"></div>
+          <!-- Nodes -->
+          <div style="display:flex;align-items:center;gap:10px;position:relative;animation:fadeUp 0.5s 0s both;">
+            <div style="position:absolute;left:-22px;width:8px;height:8px;border-radius:50%;background:#4f8ef0;animation:glow 3s 0s infinite;"></div>
+            <div style="position:absolute;left:-26px;width:16px;height:16px;border-radius:50%;border:1px solid rgba(79,142,240,0.2);animation:ping 3s 0s infinite;"></div>
+            <div style="font-family:'Barlow Condensed';font-size:8px;font-weight:700;color:#4f8ef0;letter-spacing:0.1em;">DAY 1</div>
+            <div style="font-size:7px;color:rgba(255,255,255,0.3);">Brand audit</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;position:relative;animation:fadeUp 0.5s 0.15s both;">
+            <div style="position:absolute;left:-22px;width:8px;height:8px;border-radius:50%;background:rgba(79,142,240,0.4);border:1px solid rgba(79,142,240,0.5);animation:glow 3s 0.75s infinite;"></div>
+            <div style="font-family:'Barlow Condensed';font-size:8px;font-weight:700;color:rgba(79,142,240,0.5);letter-spacing:0.1em;">DAY 30</div>
+            <div style="font-size:7px;color:rgba(255,255,255,0.25);">Content sprint</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;position:relative;animation:fadeUp 0.5s 0.3s both;">
+            <div style="position:absolute;left:-22px;width:8px;height:8px;border-radius:50%;background:rgba(79,142,240,0.25);border:1px solid rgba(79,142,240,0.3);animation:glow 3s 1.5s infinite;"></div>
+            <div style="font-family:'Barlow Condensed';font-size:8px;font-weight:700;color:rgba(79,142,240,0.35);letter-spacing:0.1em;">DAY 60</div>
+            <div style="font-size:7px;color:rgba(255,255,255,0.2);">Systems live</div>
+          </div>
+          <div style="display:flex;align-items:center;gap:10px;position:relative;animation:fadeUp 0.5s 0.45s both;">
+            <div style="position:absolute;left:-22px;width:8px;height:8px;border-radius:50%;background:rgba(52,211,153,0.4);border:1px solid rgba(52,211,153,0.5);animation:glow 3s 2.25s infinite;"></div>
+            <div style="position:absolute;left:-26px;width:16px;height:16px;border-radius:50%;border:1px solid rgba(52,211,153,0.2);animation:ping 3s 2.25s infinite;"></div>
+            <div style="font-family:'Barlow Condensed';font-size:8px;font-weight:700;color:rgba(52,211,153,0.5);letter-spacing:0.1em;">DAY 90</div>
+            <div style="font-size:7px;color:rgba(52,211,153,0.35);">Machine running</div>
+          </div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Timeline / Journey</div>
+        <div class="pattern-use">Progression over time, milestones, roadmap</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ METAPHOR & NARRATIVE ============ -->
+<div class="category">
+  <div class="cat-label">Metaphor & Narrative</div>
+  <div class="grid">
+
+    <!-- Iceberg -->
+    <div class="pattern-card">
+      <div class="preview">
+        <svg width="140" height="160" viewBox="0 0 140 160">
+          <!-- Water line -->
+          <line x1="0" y1="55" x2="140" y2="55" stroke="rgba(79,142,240,0.2)" stroke-width="1"/>
+          <text x="130" y="50" text-anchor="end" font-family="Barlow Condensed" font-size="7" fill="rgba(79,142,240,0.3)" letter-spacing="0.1em">VISIBLE</text>
+          <text x="130" y="66" text-anchor="end" font-family="Barlow Condensed" font-size="7" fill="rgba(255,255,255,0.15)" letter-spacing="0.1em">HIDDEN</text>
+          <!-- Above water (small tip) -->
+          <polygon points="70,20 82,55 58,55" fill="rgba(79,142,240,0.15)" stroke="rgba(79,142,240,0.25)" stroke-width="1">
+            <animateTransform attributeName="transform" type="translate" values="0,0;0,-3;0,0" dur="4s" repeatCount="indefinite"/>
+          </polygon>
+          <!-- Below water (large mass) -->
+          <polygon points="58,55 82,55 105,90 110,120 95,140 45,140 30,120 35,90" fill="rgba(79,142,240,0.06)" stroke="rgba(79,142,240,0.1)" stroke-width="1">
+            <animateTransform attributeName="transform" type="translate" values="0,0;0,2;0,0" dur="4s" repeatCount="indefinite"/>
+          </polygon>
+          <!-- Label -->
+          <text x="70" y="40" text-anchor="middle" font-family="Barlow Condensed" font-size="7" font-weight="700" fill="#4f8ef0">5%</text>
+          <text x="70" y="105" text-anchor="middle" font-family="Barlow Condensed" font-size="8" font-weight="700" fill="rgba(255,255,255,0.2)">95%</text>
+        </svg>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Iceberg</div>
+        <div class="pattern-use">What they see vs the real work beneath, hidden depth</div>
+      </div>
+    </div>
+
+    <!-- Lever / Fulcrum -->
+    <div class="pattern-card">
+      <div class="preview">
+        <svg width="160" height="100" viewBox="0 0 160 100">
+          <!-- Fulcrum triangle -->
+          <polygon points="90,70 82,82 98,82" fill="rgba(79,142,240,0.15)" stroke="rgba(79,142,240,0.25)" stroke-width="1"/>
+          <!-- Lever bar -->
+          <line x1="20" y1="55" x2="140" y2="65" stroke="rgba(255,255,255,0.15)" stroke-width="2.5" stroke-linecap="round">
+            <animateTransform attributeName="transform" type="rotate" values="0 90 70;-3 90 70;3 90 70;0 90 70" dur="4s" repeatCount="indefinite"/>
+          </line>
+          <!-- Small input (left) -->
+          <circle cx="30" cy="54" r="8" fill="rgba(79,142,240,0.1)" stroke="#4f8ef0" stroke-width="1"/>
+          <text x="30" y="57" text-anchor="middle" font-family="Barlow Condensed" font-size="7" font-weight="700" fill="#4f8ef0">1×</text>
+          <text x="30" y="42" text-anchor="middle" font-family="Barlow Condensed" font-size="6" fill="rgba(255,255,255,0.25)" letter-spacing="0.1em">INPUT</text>
+          <!-- Big output (right) -->
+          <circle cx="130" cy="62" r="14" fill="rgba(52,211,153,0.08)" stroke="rgba(52,211,153,0.2)" stroke-width="1" style="animation:breathe 3s infinite;transform-origin:130px 62px;"/>
+          <circle cx="130" cy="62" r="18" fill="none" stroke="rgba(52,211,153,0.1)" stroke-width="1" style="animation:ping 3s infinite;"/>
+          <text x="130" y="65" text-anchor="middle" font-family="Barlow Condensed" font-size="10" font-weight="900" fill="rgba(52,211,153,0.5)" style="animation:glowText 3s infinite;">10×</text>
+          <text x="130" y="45" text-anchor="middle" font-family="Barlow Condensed" font-size="6" fill="rgba(52,211,153,0.35)" letter-spacing="0.1em">OUTPUT</text>
+        </svg>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Lever / Fulcrum</div>
+        <div class="pattern-use">Small input → massive output, leverage, disproportionate returns</div>
+      </div>
+    </div>
+
+    <!-- Lock & Key -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="display:flex;align-items:center;gap:16px;">
+          <!-- Lock -->
+          <div style="position:relative;display:flex;flex-direction:column;align-items:center;">
+            <div style="width:32px;height:22px;border:2px solid rgba(255,255,255,0.12);border-bottom:none;border-radius:16px 16px 0 0;"></div>
+            <div style="width:40px;height:28px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:3px;display:flex;align-items:center;justify-content:center;">
+              <div style="width:5px;height:10px;background:rgba(255,255,255,0.2);border-radius:1px;"></div>
+            </div>
+            <div style="font-family:'Barlow Condensed';font-size:7px;color:rgba(255,255,255,0.2);margin-top:6px;letter-spacing:0.1em;">LOCKED</div>
+          </div>
+          <!-- Arrow -->
+          <div style="font-family:'Barlow Condensed';font-size:16px;color:rgba(79,142,240,0.3);">→</div>
+          <!-- Unlocked -->
+          <div style="position:relative;display:flex;flex-direction:column;align-items:center;">
+            <div style="width:32px;height:22px;border:2px solid rgba(52,211,153,0.2);border-bottom:none;border-radius:16px 16px 0 0;transform-origin:bottom left;animation:shackleOpen 2s 0.5s cubic-bezier(0.16,1,0.3,1) both;"></div>
+            <div style="width:40px;height:28px;background:rgba(52,211,153,0.04);border:1px solid rgba(52,211,153,0.15);border-radius:3px;display:flex;align-items:center;justify-content:center;">
+              <div style="width:5px;height:10px;background:rgba(52,211,153,0.3);border-radius:1px;"></div>
+            </div>
+            <div style="font-family:'Barlow Condensed';font-size:7px;color:rgba(52,211,153,0.4);margin-top:6px;letter-spacing:0.1em;">UNLOCKED</div>
+          </div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Lock & Key</div>
+        <div class="pattern-use">Unlocking potential, access, breakthrough moment</div>
+      </div>
+    </div>
+
+    <!-- Domino Chain -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="display:flex;align-items:flex-end;gap:6px;height:80px;">
+          <div style="width:10px;height:40px;background:rgba(79,142,240,0.15);border:1px solid rgba(79,142,240,0.2);border-radius:2px;transform-origin:bottom center;animation:dominoFall 2s 0s cubic-bezier(0.16,1,0.3,1) both;--fall-deg:-65deg;"></div>
+          <div style="width:10px;height:45px;background:rgba(79,142,240,0.2);border:1px solid rgba(79,142,240,0.25);border-radius:2px;transform-origin:bottom center;animation:dominoFall 2s 0.2s cubic-bezier(0.16,1,0.3,1) both;--fall-deg:-55deg;"></div>
+          <div style="width:10px;height:50px;background:rgba(79,142,240,0.25);border:1px solid rgba(79,142,240,0.3);border-radius:2px;transform-origin:bottom center;animation:dominoFall 2s 0.4s cubic-bezier(0.16,1,0.3,1) both;--fall-deg:-45deg;"></div>
+          <div style="width:10px;height:55px;background:rgba(79,142,240,0.3);border:1px solid rgba(79,142,240,0.35);border-radius:2px;transform-origin:bottom center;animation:dominoFall 2s 0.6s cubic-bezier(0.16,1,0.3,1) both;--fall-deg:-35deg;"></div>
+          <div style="width:10px;height:60px;background:rgba(79,142,240,0.35);border:1px solid #4f8ef0;border-radius:2px;transform-origin:bottom center;animation:dominoFall 2s 0.8s cubic-bezier(0.16,1,0.3,1) both, glow 2s 1.5s infinite;--fall-deg:-25deg;"></div>
+          <div style="width:12px;height:70px;background:rgba(52,211,153,0.1);border:1px solid rgba(52,211,153,0.25);border-radius:2px;margin-left:8px;animation:fadeUp 0.5s 1.2s both;"></div>
+        </div>
+        <div style="position:absolute;bottom:30px;right:24px;font-family:'Barlow Condensed';font-size:7px;color:rgba(52,211,153,0.4);letter-spacing:0.1em;animation:fadeUp 0.5s 1.4s both;">RESULT</div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Domino Chain</div>
+        <div class="pattern-use">Cascade effect, one thing triggers everything, compound</div>
+      </div>
+    </div>
+
+    <!-- Filter / Sieve -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:0;">
+          <!-- Input dots -->
+          <div style="display:flex;gap:4px;margin-bottom:8px;">
+            <div style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.1);animation:floatSlow 3s 0s infinite;"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:rgba(79,142,240,0.3);animation:floatSlow 3s 0.2s infinite;"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.08);animation:floatSlow 3s 0.4s infinite;"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:rgba(79,142,240,0.2);animation:floatSlow 3s 0.6s infinite;"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.06);animation:floatSlow 3s 0.8s infinite;"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.1);animation:floatSlow 3s 1.0s infinite;"></div>
+            <div style="width:8px;height:8px;border-radius:50%;background:rgba(79,142,240,0.15);animation:floatSlow 3s 1.2s infinite;"></div>
+          </div>
+          <div style="font-family:'Barlow Condensed';font-size:6px;color:rgba(255,255,255,0.15);letter-spacing:0.15em;margin-bottom:6px;">ALL CONTENT</div>
+          <!-- Filter bar -->
+          <div style="width:100px;height:3px;background:repeating-linear-gradient(90deg, rgba(79,142,240,0.3) 0px, rgba(79,142,240,0.3) 2px, transparent 2px, transparent 6px);margin-bottom:2px;"></div>
+          <div style="width:80px;height:3px;background:repeating-linear-gradient(90deg, rgba(79,142,240,0.2) 0px, rgba(79,142,240,0.2) 2px, transparent 2px, transparent 6px);margin-bottom:8px;"></div>
+          <div style="font-family:'Barlow Condensed';font-size:7px;color:#4f8ef0;letter-spacing:0.15em;margin-bottom:6px;">YOUR FILTER</div>
+          <!-- Output dots (fewer, brighter) -->
+          <div style="display:flex;gap:6px;">
+            <div style="width:10px;height:10px;border-radius:50%;background:#4f8ef0;animation:glow 2s 0s infinite;"></div>
+            <div style="width:10px;height:10px;border-radius:50%;background:#4f8ef0;animation:glow 2s 0.5s infinite;"></div>
+          </div>
+          <div style="font-family:'Barlow Condensed';font-size:6px;color:rgba(52,211,153,0.4);letter-spacing:0.15em;margin-top:6px;">HIGH-IMPACT</div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Filter / Sieve</div>
+        <div class="pattern-use">Narrowing down, curation, signal from noise</div>
+      </div>
+    </div>
+
+    <!-- Equation -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div style="padding:8px 10px;background:rgba(79,142,240,0.08);border:1px solid rgba(79,142,240,0.15);border-radius:4px;animation:fadeUp 0.5s 0s both;">
+            <div style="font-family:'Barlow Condensed';font-size:10px;font-weight:900;color:#4f8ef0;letter-spacing:0.04em;">AUTH</div>
+          </div>
+          <div style="font-family:'Barlow Condensed';font-size:16px;color:rgba(255,255,255,0.15);animation:fadeUp 0.4s 0.15s both;">+</div>
+          <div style="padding:8px 10px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.06);border-radius:4px;animation:fadeUp 0.5s 0.3s both;">
+            <div style="font-family:'Barlow Condensed';font-size:10px;font-weight:900;color:rgba(255,255,255,0.4);letter-spacing:0.04em;">VIS</div>
+          </div>
+          <div style="font-family:'Barlow Condensed';font-size:16px;color:rgba(255,255,255,0.15);animation:fadeUp 0.4s 0.45s both;">+</div>
+          <div style="padding:8px 10px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.06);border-radius:4px;animation:fadeUp 0.5s 0.6s both;">
+            <div style="font-family:'Barlow Condensed';font-size:10px;font-weight:900;color:rgba(255,255,255,0.4);letter-spacing:0.04em;">EXE</div>
+          </div>
+          <div style="font-family:'Barlow Condensed';font-size:16px;color:rgba(79,142,240,0.3);animation:fadeUp 0.4s 0.75s both;">=</div>
+          <div style="padding:8px 10px;background:rgba(52,211,153,0.06);border:1px solid rgba(52,211,153,0.15);border-radius:4px;animation:fadeUp 0.5s 0.9s both;">
+            <div style="font-family:'Barlow Condensed';font-size:10px;font-weight:900;color:rgba(52,211,153,0.5);letter-spacing:0.04em;animation:glowText 3s 1.5s infinite;">AE</div>
+          </div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Equation</div>
+        <div class="pattern-use">Formula, components that combine, named frameworks</div>
+      </div>
+    </div>
+
+    <!-- Thermometer -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="display:flex;align-items:flex-end;gap:16px;">
+          <div style="position:relative;width:20px;height:120px;">
+            <!-- Track -->
+            <div style="position:absolute;inset:0;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:10px;overflow:hidden;">
+              <!-- Fill -->
+              <div style="position:absolute;bottom:0;left:0;right:0;height:35%;background:linear-gradient(to top, rgba(239,68,68,0.3), rgba(79,142,240,0.2));border-radius:0 0 10px 10px;transform-origin:bottom;animation:growUp 1.5s 0.3s cubic-bezier(0.16,1,0.3,1) both;"></div>
+            </div>
+            <!-- Marker -->
+            <div style="position:absolute;left:24px;bottom:33%;display:flex;align-items:center;gap:4px;">
+              <div style="width:6px;height:1px;background:rgba(239,68,68,0.4);"></div>
+              <div style="font-family:'Barlow Condensed';font-size:7px;color:rgba(239,68,68,0.5);font-weight:700;">YOU</div>
+            </div>
+            <!-- Target -->
+            <div style="position:absolute;left:24px;top:15%;display:flex;align-items:center;gap:4px;">
+              <div style="width:6px;height:1px;background:rgba(52,211,153,0.4);"></div>
+              <div style="font-family:'Barlow Condensed';font-size:7px;color:rgba(52,211,153,0.5);font-weight:700;">TARGET</div>
+            </div>
+          </div>
+          <!-- Labels -->
+          <div style="display:flex;flex-direction:column;justify-content:space-between;height:120px;">
+            <div style="font-family:'Barlow Condensed';font-size:7px;color:rgba(52,211,153,0.3);letter-spacing:0.1em;">AUTHORITY</div>
+            <div style="font-family:'Barlow Condensed';font-size:7px;color:rgba(239,68,68,0.3);letter-spacing:0.1em;">UNKNOWN</div>
+          </div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Thermometer / Gauge</div>
+        <div class="pattern-use">Current level vs target, how far to go, status check</div>
+      </div>
+    </div>
+
+    <!-- Pyramid -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:3px;">
+          <div style="width:40px;height:20px;background:rgba(52,211,153,0.08);border:1px solid rgba(52,211,153,0.15);border-radius:2px;display:flex;align-items:center;justify-content:center;animation:fadeUp 0.5s 0.6s both;">
+            <span style="font-family:'Barlow Condensed';font-size:7px;font-weight:700;color:rgba(52,211,153,0.5);letter-spacing:0.08em;animation:glowText 3s 1.5s infinite;">ACCESS</span>
+          </div>
+          <div style="width:70px;height:20px;background:rgba(79,142,240,0.08);border:1px solid rgba(79,142,240,0.12);border-radius:2px;display:flex;align-items:center;justify-content:center;animation:fadeUp 0.5s 0.4s both;">
+            <span style="font-family:'Barlow Condensed';font-size:7px;font-weight:700;color:rgba(79,142,240,0.5);letter-spacing:0.08em;">SYSTEMS</span>
+          </div>
+          <div style="width:100px;height:20px;background:rgba(79,142,240,0.05);border:1px solid rgba(79,142,240,0.08);border-radius:2px;display:flex;align-items:center;justify-content:center;animation:fadeUp 0.5s 0.2s both;">
+            <span style="font-family:'Barlow Condensed';font-size:7px;font-weight:700;color:rgba(79,142,240,0.35);letter-spacing:0.08em;">CONTENT</span>
+          </div>
+          <div style="width:130px;height:20px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:2px;display:flex;align-items:center;justify-content:center;animation:fadeUp 0.5s 0s both;">
+            <span style="font-family:'Barlow Condensed';font-size:7px;font-weight:700;color:rgba(255,255,255,0.2);letter-spacing:0.08em;">BRAND FOUNDATION</span>
+          </div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Pyramid / Stack</div>
+        <div class="pattern-use">Hierarchy, what builds on what, foundation to pinnacle</div>
+      </div>
+    </div>
+
+    <!-- Toggle / Switch -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <!-- Off state -->
+          <div style="display:flex;align-items:center;gap:10px;animation:fadeUp 0.5s 0.5s both;">
+            <div style="width:36px;height:18px;background:rgba(255,255,255,0.06);border-radius:9px;position:relative;border:1px solid rgba(255,255,255,0.08);overflow:hidden;">
+              <div style="position:absolute;left:2px;top:2px;width:12px;height:12px;border-radius:50%;background:rgba(255,255,255,0.15);transition:all 0.4s;"></div>
+            </div>
+            <div style="font-family:'Barlow Condensed';font-size:9px;font-weight:700;color:rgba(255,255,255,0.2);text-decoration:line-through;letter-spacing:0.08em;text-transform:uppercase;">Post more content</div>
+          </div>
+          <!-- On state -->
+          <div style="display:flex;align-items:center;gap:10px;animation:fadeUp 0.5s 1s both;">
+            <div style="width:36px;height:18px;background:rgba(79,142,240,0.2);border-radius:9px;position:relative;border:1px solid rgba(79,142,240,0.3);overflow:hidden;">
+              <div style="position:absolute;right:2px;top:2px;width:12px;height:12px;border-radius:50%;background:#4f8ef0;animation:glow 2s infinite;"></div>
+            </div>
+            <div style="font-family:'Barlow Condensed';font-size:9px;font-weight:700;color:#4f8ef0;letter-spacing:0.08em;text-transform:uppercase;animation:glowText 3s infinite;">Engineer beliefs</div>
+          </div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Toggle / Switch</div>
+        <div class="pattern-use">Old belief off → new belief on, mode shift</div>
+      </div>
+    </div>
+
+    <!-- Magnifying Glass -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="position:relative;">
+          <!-- Blurred background -->
+          <div style="display:flex;gap:3px;flex-wrap:wrap;width:100px;opacity:0.3;filter:blur(1px);">
+            <div style="width:20px;height:12px;background:rgba(255,255,255,0.06);border-radius:2px;"></div>
+            <div style="width:30px;height:12px;background:rgba(255,255,255,0.06);border-radius:2px;"></div>
+            <div style="width:25px;height:12px;background:rgba(255,255,255,0.06);border-radius:2px;"></div>
+            <div style="width:18px;height:12px;background:rgba(255,255,255,0.06);border-radius:2px;"></div>
+            <div style="width:28px;height:12px;background:rgba(255,255,255,0.06);border-radius:2px;"></div>
+            <div style="width:22px;height:12px;background:rgba(255,255,255,0.06);border-radius:2px;"></div>
+          </div>
+          <!-- Magnifier circle -->
+          <div style="position:absolute;top:5px;left:20px;width:50px;height:50px;border-radius:50%;border:2px solid rgba(79,142,240,0.3);background:rgba(79,142,240,0.03);display:flex;align-items:center;justify-content:center;animation:scanMove 5s ease-in-out infinite;">
+            <div style="font-family:'Barlow Condensed';font-size:9px;font-weight:900;color:#4f8ef0;animation:glowText 2s infinite;">THIS</div>
+          </div>
+          <!-- Handle -->
+          <div style="position:absolute;top:48px;left:62px;width:20px;height:3px;background:rgba(79,142,240,0.2);transform:rotate(45deg);border-radius:2px;animation:scanMove 5s ease-in-out infinite;"></div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Magnifying Glass</div>
+        <div class="pattern-use">Zooming in on the real issue, focus, hidden detail</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ UI & SOCIAL PROOF ============ -->
+<div class="category">
+  <div class="cat-label">UI & Social Proof</div>
+  <div class="grid">
+
+    <!-- DM Mockup -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="width:100%;display:flex;flex-direction:column;gap:6px;">
+          <!-- Received -->
+          <div style="display:flex;gap:6px;align-items:flex-end;animation:slideIn 0.5s 0.3s cubic-bezier(0.16,1,0.3,1) both;">
+            <div style="width:18px;height:18px;border-radius:50%;background:rgba(79,142,240,0.12);border:1px solid rgba(79,142,240,0.15);flex-shrink:0;"></div>
+            <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:10px 10px 10px 2px;padding:6px 10px;max-width:75%;">
+              <div style="font-size:8px;color:rgba(255,255,255,0.35);">How do you get so many inbound leads?</div>
+            </div>
+          </div>
+          <!-- Sent -->
+          <div style="display:flex;justify-content:flex-end;animation:fadeUp 0.5s 0.9s cubic-bezier(0.16,1,0.3,1) both;">
+            <div style="background:rgba(79,142,240,0.12);border:1px solid rgba(79,142,240,0.15);border-radius:10px 10px 2px 10px;padding:6px 10px;max-width:75%;">
+              <div style="font-size:8px;color:rgba(79,142,240,0.7);">Content does 90% of the selling before they ever DM.</div>
+            </div>
+          </div>
+          <!-- Received -->
+          <div style="display:flex;gap:6px;align-items:flex-end;animation:slideIn 0.5s 1.5s cubic-bezier(0.16,1,0.3,1) both;">
+            <div style="width:18px;height:18px;border-radius:50%;background:rgba(79,142,240,0.12);border:1px solid rgba(79,142,240,0.15);flex-shrink:0;"></div>
+            <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:10px 10px 10px 2px;padding:6px 10px;">
+              <div style="font-size:8px;color:rgba(255,255,255,0.35);">That's wild. How?</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">DM Conversation</div>
+        <div class="pattern-use">Social proof, real conversations, inbound interest</div>
+      </div>
+    </div>
+
+    <!-- Notification Stack -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="display:flex;flex-direction:column;gap:5px;width:100%;">
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.06);border-radius:8px;animation:slideIn 0.4s 0s both;">
+            <div style="width:22px;height:22px;border-radius:6px;background:rgba(79,142,240,0.15);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;">💬</div>
+            <div>
+              <div style="font-family:'Barlow Condensed';font-size:8px;font-weight:700;color:rgba(255,255,255,0.5);">New DM from Jay W.</div>
+              <div style="font-size:7px;color:rgba(255,255,255,0.2);">"I need this. When can we start?"</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);border-radius:8px;animation:slideIn 0.4s 0.1s both;">
+            <div style="width:22px;height:22px;border-radius:6px;background:rgba(52,211,153,0.1);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;">📈</div>
+            <div>
+              <div style="font-family:'Barlow Condensed';font-size:8px;font-weight:700;color:rgba(255,255,255,0.4);">Follower milestone</div>
+              <div style="font-size:7px;color:rgba(255,255,255,0.18);">You reached 50,000 followers</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:rgba(255,255,255,0.015);border:1px solid rgba(255,255,255,0.04);border-radius:8px;animation:slideIn 0.4s 0.2s both;">
+            <div style="width:22px;height:22px;border-radius:6px;background:rgba(79,142,240,0.1);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;">🔔</div>
+            <div>
+              <div style="font-family:'Barlow Condensed';font-size:8px;font-weight:700;color:rgba(255,255,255,0.35);">3 new saves on your post</div>
+              <div style="font-size:7px;color:rgba(255,255,255,0.15);">Your carousel is performing well</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Notification Stack</div>
+        <div class="pattern-use">Results rolling in, proof of system working, momentum</div>
+      </div>
+    </div>
+
+    <!-- Calendar Grid -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="display:flex;flex-direction:column;gap:2px;">
+          <div style="display:flex;gap:2px;">
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(52,211,153,0.2);"></div>
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(52,211,153,0.3);"></div>
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(52,211,153,0.25);"></div>
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(52,211,153,0.35);"></div>
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(52,211,153,0.2);"></div>
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(255,255,255,0.03);"></div>
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(255,255,255,0.03);"></div>
+          </div>
+          <div style="display:flex;gap:2px;">
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(52,211,153,0.3);"></div>
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(52,211,153,0.4);"></div>
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(52,211,153,0.35);"></div>
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(52,211,153,0.3);"></div>
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(52,211,153,0.45);"></div>
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(255,255,255,0.03);"></div>
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(255,255,255,0.03);"></div>
+          </div>
+          <div style="display:flex;gap:2px;">
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(52,211,153,0.35);"></div>
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(52,211,153,0.5);"></div>
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(52,211,153,0.4);"></div>
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(52,211,153,0.55);"></div>
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(52,211,153,0.5);"></div>
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(255,255,255,0.03);"></div>
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(255,255,255,0.03);"></div>
+          </div>
+          <div style="display:flex;gap:2px;">
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(52,211,153,0.45);"></div>
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(52,211,153,0.6);"></div>
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(52,211,153,0.55);"></div>
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(79,142,240,0.08);border:1px solid rgba(79,142,240,0.2);"></div>
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(79,142,240,0.06);border:1px dashed rgba(79,142,240,0.15);"></div>
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(255,255,255,0.03);"></div>
+            <div style="width:14px;height:14px;border-radius:2px;background:rgba(255,255,255,0.03);"></div>
+          </div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Calendar / Activity</div>
+        <div class="pattern-use">Consistency, daily output, streak visualization</div>
+      </div>
+    </div>
+
+    <!-- Testimonial -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="width:100%;padding:8px;">
+          <div style="font-family:'Barlow Condensed';font-size:32px;color:rgba(79,142,240,0.15);line-height:0.8;margin-bottom:2px;animation:fadeUp 0.5s 0s both;">"</div>
+          <div style="font-family:'Barlow';font-size:10px;color:rgba(255,255,255,0.4);font-style:italic;line-height:1.5;margin-bottom:10px;animation:fadeUp 0.5s 0.2s both;">Doubled our revenue in 6 months. The content machine is real.</div>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div style="width:24px;height:24px;border-radius:50%;background:rgba(79,142,240,0.12);border:1px solid rgba(79,142,240,0.15);display:flex;align-items:center;justify-content:center;">
+              <span style="font-family:'Barlow Condensed';font-size:9px;font-weight:700;color:rgba(79,142,240,0.5);">TM</span>
+            </div>
+            <div>
+              <div style="font-family:'Barlow Condensed';font-size:9px;font-weight:700;color:rgba(255,255,255,0.5);">TAKI MOORE</div>
+              <div style="font-size:7px;color:rgba(255,255,255,0.2);">Million Dollar Coach</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Testimonial Card</div>
+        <div class="pattern-use">Social proof, client quote, credibility</div>
+      </div>
+    </div>
+
+    <!-- Feed Mockup -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="display:flex;flex-direction:column;gap:4px;width:100%;">
+          <div style="display:flex;gap:4px;">
+            <div style="flex:1;aspect-ratio:1;background:rgba(79,142,240,0.08);border:1px solid rgba(79,142,240,0.12);border-radius:2px;"></div>
+            <div style="flex:1;aspect-ratio:1;background:rgba(79,142,240,0.12);border:1px solid rgba(79,142,240,0.15);border-radius:2px;"></div>
+            <div style="flex:1;aspect-ratio:1;background:rgba(79,142,240,0.06);border:1px solid rgba(79,142,240,0.1);border-radius:2px;"></div>
+          </div>
+          <div style="display:flex;gap:4px;">
+            <div style="flex:1;aspect-ratio:1;background:rgba(79,142,240,0.1);border:1px solid rgba(79,142,240,0.12);border-radius:2px;"></div>
+            <div style="flex:1;aspect-ratio:1;background:rgba(79,142,240,0.15);border:1px solid #4f8ef0;border-radius:2px;animation:glow 3s infinite;"></div>
+            <div style="flex:1;aspect-ratio:1;background:rgba(79,142,240,0.08);border:1px solid rgba(79,142,240,0.1);border-radius:2px;"></div>
+          </div>
+          <div style="display:flex;gap:4px;">
+            <div style="flex:1;aspect-ratio:1;background:rgba(79,142,240,0.05);border:1px solid rgba(79,142,240,0.08);border-radius:2px;"></div>
+            <div style="flex:1;aspect-ratio:1;background:rgba(79,142,240,0.07);border:1px solid rgba(79,142,240,0.1);border-radius:2px;"></div>
+            <div style="flex:1;aspect-ratio:1;background:rgba(79,142,240,0.1);border:1px solid rgba(79,142,240,0.12);border-radius:2px;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Instagram Grid</div>
+        <div class="pattern-use">Feed aesthetic, content cohesion, visual brand</div>
+      </div>
+    </div>
+
+    <!-- Sales Call UI -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="width:100%;background:rgba(255,255,255,0.015);border:1px solid rgba(255,255,255,0.06);border-radius:6px;padding:10px;display:flex;flex-direction:column;gap:6px;">
+          <!-- Header -->
+          <div style="display:flex;align-items:center;gap:6px;">
+            <div style="width:6px;height:6px;border-radius:50%;background:rgba(52,211,153,0.5);animation:pulse 2s infinite;"></div>
+            <div style="font-family:'Barlow Condensed';font-size:8px;font-weight:700;color:rgba(255,255,255,0.3);letter-spacing:0.1em;">SALES CALL — 14:32</div>
+          </div>
+          <div style="height:1px;background:rgba(255,255,255,0.04);"></div>
+          <!-- Chat lines -->
+          <div style="font-size:7px;color:rgba(255,255,255,0.2);animation:slideIn 0.4s 0.3s both;"><span style="color:rgba(79,142,240,0.5);font-weight:600;">Prospect:</span> "It's just not in budget right now"</div>
+          <div style="font-size:7px;color:rgba(255,255,255,0.2);animation:slideIn 0.4s 0.6s both;"><span style="color:rgba(79,142,240,0.5);font-weight:600;">Prospect:</span> "I need to think about it"</div>
+          <div style="font-size:7px;color:rgba(255,255,255,0.2);animation:slideIn 0.4s 0.9s both;"><span style="color:rgba(79,142,240,0.5);font-weight:600;">Prospect:</span> "Can you send me more info?"</div>
+          <!-- Tag -->
+          <div style="display:inline-flex;align-self:flex-start;padding:2px 6px;background:rgba(239,68,68,0.08);border-radius:2px;animation:fadeUp 0.4s 1.3s both;">
+            <span style="font-family:'Barlow Condensed';font-size:7px;font-weight:700;color:rgba(239,68,68,0.5);letter-spacing:0.08em;animation:pulse 2s 2s infinite;">CONTENT PROBLEM</span>
+          </div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Sales Call UI</div>
+        <div class="pattern-use">Objection handling, call transcript, sales friction</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ STRUCTURAL & ABSTRACT ============ -->
+<div class="category">
+  <div class="cat-label">Structural & Abstract</div>
+  <div class="grid">
+
+    <!-- Puzzle Pieces -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;width:100px;">
+          <div style="height:36px;background:rgba(79,142,240,0.1);border:1px solid rgba(79,142,240,0.15);border-radius:3px;display:flex;align-items:center;justify-content:center;">
+            <span style="font-family:'Barlow Condensed';font-size:7px;font-weight:700;color:rgba(79,142,240,0.4);">BRAND</span>
+          </div>
+          <div style="height:36px;background:rgba(79,142,240,0.08);border:1px solid rgba(79,142,240,0.12);border-radius:3px;display:flex;align-items:center;justify-content:center;">
+            <span style="font-family:'Barlow Condensed';font-size:7px;font-weight:700;color:rgba(79,142,240,0.35);">CONTENT</span>
+          </div>
+          <div style="height:36px;background:rgba(79,142,240,0.06);border:1px solid rgba(79,142,240,0.1);border-radius:3px;display:flex;align-items:center;justify-content:center;">
+            <span style="font-family:'Barlow Condensed';font-size:7px;font-weight:700;color:rgba(79,142,240,0.3);">SYSTEMS</span>
+          </div>
+          <div style="height:36px;border:1px dashed rgba(79,142,240,0.15);border-radius:3px;display:flex;align-items:center;justify-content:center;animation:pulse 2s infinite;">
+            <span style="font-family:'Barlow Condensed';font-size:10px;color:rgba(79,142,240,0.2);animation:glowText 2s infinite;">?</span>
+          </div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Puzzle / Missing Piece</div>
+        <div class="pattern-use">Incomplete system, the thing they're missing</div>
+      </div>
+    </div>
+
+    <!-- Circuit / Network -->
+    <div class="pattern-card">
+      <div class="preview">
+        <svg width="140" height="100" viewBox="0 0 140 100">
+          <!-- Connections -->
+          <line x1="30" y1="30" x2="70" y2="50" stroke="rgba(79,142,240,0.15)" stroke-width="1"/>
+          <line x1="30" y1="70" x2="70" y2="50" stroke="rgba(79,142,240,0.15)" stroke-width="1"/>
+          <line x1="70" y1="50" x2="110" y2="30" stroke="rgba(79,142,240,0.2)" stroke-width="1"/>
+          <line x1="70" y1="50" x2="110" y2="70" stroke="rgba(79,142,240,0.2)" stroke-width="1"/>
+          <!-- Glow on active path -->
+          <line x1="70" y1="50" x2="110" y2="30" stroke="#4f8ef0" stroke-width="2" opacity="0.3"/>
+          <!-- Nodes -->
+          <circle cx="30" cy="30" r="5" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+          <circle cx="30" cy="70" r="5" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+          <circle cx="70" cy="50" r="7" fill="rgba(79,142,240,0.12)" stroke="#4f8ef0" stroke-width="1.5"/>
+          <circle cx="110" cy="30" r="5" fill="rgba(52,211,153,0.1)" stroke="rgba(52,211,153,0.2)" stroke-width="1"/>
+          <circle cx="110" cy="70" r="5" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+          <!-- Pulse on active node -->
+          <circle cx="70" cy="50" r="12" fill="none" stroke="rgba(79,142,240,0.15)" stroke-width="1" style="animation:ping 2s infinite;"/>
+          <circle cx="70" cy="50" r="12" fill="none" stroke="rgba(79,142,240,0.1)" stroke-width="1" style="animation:ping 2s 1s infinite;"/>
+          <!-- Signal traveling along active path -->
+          <circle r="3" fill="#4f8ef0" opacity="0.8" style="animation:pulse 1.5s infinite;">
+            <animateMotion dur="2s" repeatCount="indefinite" path="M70,50 L110,30"/>
+          </circle>
+          <circle r="2" fill="#4f8ef0" opacity="0.4">
+            <animateMotion dur="2.5s" repeatCount="indefinite" path="M70,50 L110,70"/>
+          </circle>
+        </svg>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Circuit / Network</div>
+        <div class="pattern-use">Connected system, data flow, interdependent parts</div>
+      </div>
+    </div>
+
+    <!-- Waveform -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="display:flex;align-items:center;gap:2px;height:60px;">
+          <div style="width:3px;background:#4f8ef0;border-radius:2px;opacity:0.4;animation:waveBar 1.2s 0.00s ease-in-out infinite;transform-origin:center;"></div>
+          <div style="width:3px;background:#4f8ef0;border-radius:2px;opacity:0.5;animation:waveBar 1.2s 0.08s ease-in-out infinite;transform-origin:center;"></div>
+          <div style="width:3px;background:#4f8ef0;border-radius:2px;opacity:0.6;animation:waveBar 1.2s 0.16s ease-in-out infinite;transform-origin:center;"></div>
+          <div style="width:3px;background:#4f8ef0;border-radius:2px;opacity:0.8;animation:waveBar 1.2s 0.24s ease-in-out infinite;transform-origin:center;"></div>
+          <div style="width:3px;background:#4f8ef0;border-radius:2px;animation:waveBar 1.2s 0.32s ease-in-out infinite;transform-origin:center;"></div>
+          <div style="width:3px;background:#4f8ef0;border-radius:2px;opacity:0.7;animation:waveBar 1.2s 0.40s ease-in-out infinite;transform-origin:center;"></div>
+          <div style="width:3px;background:#4f8ef0;border-radius:2px;opacity:0.9;animation:waveBar 1.2s 0.48s ease-in-out infinite;transform-origin:center;"></div>
+          <div style="width:3px;background:#4f8ef0;border-radius:2px;opacity:0.5;animation:waveBar 1.2s 0.56s ease-in-out infinite;transform-origin:center;"></div>
+          <div style="width:3px;background:#4f8ef0;border-radius:2px;opacity:0.7;animation:waveBar 1.2s 0.64s ease-in-out infinite;transform-origin:center;"></div>
+          <div style="width:3px;background:#4f8ef0;border-radius:2px;opacity:0.95;animation:waveBar 1.2s 0.72s ease-in-out infinite;transform-origin:center;"></div>
+          <div style="width:3px;background:#4f8ef0;border-radius:2px;opacity:0.6;animation:waveBar 1.2s 0.80s ease-in-out infinite;transform-origin:center;"></div>
+          <div style="width:3px;background:#4f8ef0;border-radius:2px;opacity:0.4;animation:waveBar 1.2s 0.88s ease-in-out infinite;transform-origin:center;"></div>
+          <div style="width:3px;background:#4f8ef0;border-radius:2px;opacity:0.8;animation:waveBar 1.2s 0.96s ease-in-out infinite;transform-origin:center;"></div>
+          <div style="width:3px;background:#4f8ef0;border-radius:2px;opacity:0.55;animation:waveBar 1.2s 1.04s ease-in-out infinite;transform-origin:center;"></div>
+          <div style="width:3px;background:#4f8ef0;border-radius:2px;opacity:0.3;animation:waveBar 1.2s 1.12s ease-in-out infinite;transform-origin:center;"></div>
+          <div style="width:3px;background:#4f8ef0;border-radius:2px;opacity:0.25;animation:waveBar 1.2s 1.20s ease-in-out infinite;transform-origin:center;"></div>
+          <div style="width:3px;background:#4f8ef0;border-radius:2px;opacity:0.15;animation:waveBar 1.2s 1.28s ease-in-out infinite;transform-origin:center;"></div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Waveform / Signal</div>
+        <div class="pattern-use">Voice, signal strength, energy, content output</div>
+      </div>
+    </div>
+
+    <!-- Crosshair / Target -->
+    <div class="pattern-card">
+      <div class="preview">
+        <svg width="120" height="120" viewBox="0 0 120 120">
+          <circle cx="60" cy="60" r="45" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+          <circle cx="60" cy="60" r="30" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+          <circle cx="60" cy="60" r="15" fill="none" stroke="rgba(79,142,240,0.15)" stroke-width="1"/>
+          <!-- Crosshair lines -->
+          <line x1="60" y1="10" x2="60" y2="110" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+          <line x1="10" y1="60" x2="110" y2="60" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+          <!-- Scanning crosshair overlay -->
+          <g style="animation:scanX 4s ease-in-out infinite;">
+            <g style="animation:scanY 3s ease-in-out infinite;">
+              <line x1="45" y1="60" x2="55" y2="60" stroke="#4f8ef0" stroke-width="1.5" opacity="0.5"/>
+              <line x1="65" y1="60" x2="75" y2="60" stroke="#4f8ef0" stroke-width="1.5" opacity="0.5"/>
+              <line x1="60" y1="45" x2="60" y2="55" stroke="#4f8ef0" stroke-width="1.5" opacity="0.5"/>
+              <line x1="60" y1="65" x2="60" y2="75" stroke="#4f8ef0" stroke-width="1.5" opacity="0.5"/>
+            </g>
+          </g>
+          <!-- Bullseye -->
+          <circle cx="60" cy="60" r="4" fill="#4f8ef0" opacity="0.8" style="animation:breathe 2s infinite;"/>
+          <circle cx="60" cy="60" r="8" fill="none" stroke="#4f8ef0" stroke-width="1" opacity="0.3" style="animation:ping 2.5s infinite;"/>
+          <circle cx="60" cy="60" r="8" fill="none" stroke="#4f8ef0" stroke-width="1" opacity="0.2" style="animation:ping 2.5s 1.25s infinite;"/>
+          <!-- Off-target dot -->
+          <circle cx="38" cy="35" r="3" fill="rgba(239,68,68,0.4)" style="animation:pulse 2s infinite;"/>
+          <text x="28" y="30" font-family="Barlow Condensed" font-size="6" fill="rgba(239,68,68,0.35)" letter-spacing="0.08em">MOST</text>
+        </svg>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Crosshair / Target</div>
+        <div class="pattern-use">Precision, aim, most people miss the mark</div>
+      </div>
+    </div>
+
+    <!-- Pillars -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:0;">
+          <!-- Roof -->
+          <div style="width:130px;height:14px;background:rgba(79,142,240,0.08);border:1px solid rgba(79,142,240,0.15);border-radius:2px;display:flex;align-items:center;justify-content:center;margin-bottom:4px;animation:fadeUp 0.5s 0.6s both;">
+            <span style="font-family:'Barlow Condensed';font-size:7px;font-weight:900;color:#4f8ef0;letter-spacing:0.15em;animation:glowText 3s 1s infinite;">AUTHORITY</span>
+          </div>
+          <!-- Pillars -->
+          <div style="display:flex;gap:8px;animation:fadeUp 0.5s 0.3s both;">
+            <div style="width:32px;height:60px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:2px;display:flex;align-items:center;justify-content:center;writing-mode:vertical-lr;text-orientation:mixed;transform:rotate(180deg);">
+              <span style="font-family:'Barlow Condensed';font-size:6px;font-weight:700;color:rgba(255,255,255,0.25);letter-spacing:0.12em;">BRAND</span>
+            </div>
+            <div style="width:32px;height:60px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:2px;display:flex;align-items:center;justify-content:center;writing-mode:vertical-lr;text-orientation:mixed;transform:rotate(180deg);">
+              <span style="font-family:'Barlow Condensed';font-size:6px;font-weight:700;color:rgba(255,255,255,0.25);letter-spacing:0.12em;">CONTENT</span>
+            </div>
+            <div style="width:32px;height:60px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:2px;display:flex;align-items:center;justify-content:center;writing-mode:vertical-lr;text-orientation:mixed;transform:rotate(180deg);">
+              <span style="font-family:'Barlow Condensed';font-size:6px;font-weight:700;color:rgba(255,255,255,0.25);letter-spacing:0.12em;">SYSTEMS</span>
+            </div>
+          </div>
+          <!-- Base -->
+          <div style="width:130px;height:10px;background:rgba(255,255,255,0.025);border:1px solid rgba(255,255,255,0.06);border-radius:2px;margin-top:4px;animation:fadeUp 0.5s 0s both;"></div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Pillars / Columns</div>
+        <div class="pattern-use">Foundation, what holds it up, supporting elements</div>
+      </div>
+    </div>
+
+    <!-- Accordion -->
+    <div class="pattern-card">
+      <div class="preview">
+        <div style="display:flex;flex-direction:column;gap:3px;width:100%;">
+          <div style="padding:6px 10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:3px;display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-family:'Barlow Condensed';font-size:8px;font-weight:700;color:rgba(255,255,255,0.25);letter-spacing:0.08em;">STEP 1</span>
+            <span style="font-size:8px;color:rgba(255,255,255,0.15);">+</span>
+          </div>
+          <div style="border:1px solid rgba(79,142,240,0.2);border-radius:3px;overflow:hidden;animation:fadeUp 0.4s 0.2s both;">
+            <div style="padding:6px 10px;background:rgba(79,142,240,0.06);display:flex;justify-content:space-between;align-items:center;">
+              <span style="font-family:'Barlow Condensed';font-size:8px;font-weight:700;color:#4f8ef0;letter-spacing:0.08em;animation:glowText 3s infinite;">STEP 2</span>
+              <span style="font-size:8px;color:#4f8ef0;">−</span>
+            </div>
+            <div style="padding:6px 10px;background:rgba(79,142,240,0.02);">
+              <div style="font-size:7px;color:rgba(255,255,255,0.3);line-height:1.4;animation:fadeUp 0.4s 0.5s both;">The expanded detail goes here. This is the step they're currently on.</div>
+            </div>
+          </div>
+          <div style="padding:6px 10px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);border-radius:3px;display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-family:'Barlow Condensed';font-size:8px;font-weight:700;color:rgba(255,255,255,0.25);letter-spacing:0.08em;">STEP 3</span>
+            <span style="font-size:8px;color:rgba(255,255,255,0.15);">+</span>
+          </div>
+        </div>
+      </div>
+      <div class="pattern-info">
+        <div class="pattern-name">Accordion / Reveal</div>
+        <div class="pattern-use">Deep dive into one step, expanded detail, focused attention</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer">THE AUTHORITY ENGINE — VISUAL PATTERN LIBRARY</div>
+
+<script>
+// === Animated Heat Grid ===
+(function(){
+  const grid = document.querySelector('.heat-grid');
+  if (!grid) return;
+  const intensities = [
+    [0.08,0.15,0.05,0.4,0.6,0.3,0.1],
+    [0.05,0.08,0.2,0.5,0.8,0.9,0.4],
+    [0.03,0.05,0.1,0.3,0.5,0.7,1.0],
+    [0.03,0.03,0.06,0.15,0.3,0.5,0.6]
+  ];
+  let cells = [];
+  intensities.forEach((row, ri) => {
+    const rowEl = document.createElement('div');
+    rowEl.style.cssText = 'display:flex;gap:3px;';
+    row.forEach((val, ci) => {
+      const cell = document.createElement('div');
+      cell.style.cssText = `width:14px;height:14px;border-radius:2px;background:rgba(79,142,240,0);transition:background 0.6s ease;`;
+      cell.dataset.target = val;
+      cell.dataset.delay = (ri * 7 + ci) * 80;
+      rowEl.appendChild(cell);
+      cells.push(cell);
+    });
+    grid.appendChild(rowEl);
+  });
+
+  function animateCells() {
+    // Reset
+    cells.forEach(c => c.style.background = 'rgba(79,142,240,0)');
+    // Light up sequentially
+    cells.forEach(c => {
+      setTimeout(() => {
+        c.style.background = `rgba(79,142,240,${c.dataset.target})`;
+        if (parseFloat(c.dataset.target) > 0.7) {
+          c.style.boxShadow = `0 0 6px rgba(79,142,240,${c.dataset.target * 0.4})`;
+        }
+      }, parseInt(c.dataset.delay));
+    });
+  }
+
+  animateCells();
+  setInterval(() => {
+    // Fade out then re-animate
+    cells.forEach(c => { c.style.background = 'rgba(79,142,240,0)'; c.style.boxShadow = 'none'; });
+    setTimeout(animateCells, 600);
+  }, 4000);
+})();
+
+// === Card hover replay ===
+document.querySelectorAll('.pattern-card').forEach(card => {
+  card.addEventListener('mouseenter', () => {
+    const preview = card.querySelector('.preview');
+    // Clone and replace to replay all CSS animations
+    const clone = preview.cloneNode(true);
+    preview.parentNode.replaceChild(clone, preview);
+
+    // Re-init heat grid if this card contains it
+    if (clone.querySelector('.heat-grid')) {
+      const grid = clone.querySelector('.heat-grid');
+      grid.innerHTML = '';
+      const intensities = [
+        [0.08,0.15,0.05,0.4,0.6,0.3,0.1],
+        [0.05,0.08,0.2,0.5,0.8,0.9,0.4],
+        [0.03,0.05,0.1,0.3,0.5,0.7,1.0],
+        [0.03,0.03,0.06,0.15,0.3,0.5,0.6]
+      ];
+      intensities.forEach((row, ri) => {
+        const rowEl = document.createElement('div');
+        rowEl.style.cssText = 'display:flex;gap:3px;';
+        row.forEach((val, ci) => {
+          const cell = document.createElement('div');
+          cell.style.cssText = `width:14px;height:14px;border-radius:2px;background:rgba(79,142,240,0);transition:background 0.6s ease;`;
+          setTimeout(() => {
+            cell.style.background = `rgba(79,142,240,${val})`;
+            if (val > 0.7) cell.style.boxShadow = `0 0 6px rgba(79,142,240,${val*0.4})`;
+          }, (ri * 7 + ci) * 80);
+          rowEl.appendChild(cell);
+        });
+        grid.appendChild(rowEl);
+      });
+    }
+  });
+});
+
+// === Entrance animations on scroll ===
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.style.opacity = '1';
+      entry.target.style.transform = 'translateY(0)';
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.pattern-card').forEach((card, i) => {
+  card.style.opacity = '0';
+  card.style.transform = 'translateY(20px)';
+  card.style.transition = `opacity 0.5s ${i % 6 * 0.08}s cubic-bezier(0.16,1,0.3,1), transform 0.5s ${i % 6 * 0.08}s cubic-bezier(0.16,1,0.3,1)`;
+  observer.observe(card);
+});
+</script>
+
+</body>
+</html>
